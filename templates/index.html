@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+    <title>Mapa casas</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.css" />
+</head>
+ 
+<body id="cuerpo">
+    <div id="map" style="width: 1000px; height: 800px" ></div>
+    <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.js">
+    </script>
+    
+    <script>
+        var datos = JSON.parse('{{ datos| tojson | safe}}');
+        // datos es un json 
+        var plano = new Array();
+        var index = 0; //para recorrer la lista
+        var lista_aux = new Array();
+        for (index = 0; index < datos.length; index++) {
+            //console.log(index);  
+           // console.log(lista_aux);
+            lista_aux = [ "<h1> "+ datos[index].descripcion+ "</h1>" + "Precio:" + datos[index].precio, datos[index].ubicacion.latitud, datos[index].ubicacion.longitud];                   
+            plano.push(lista_aux);// agregamos al array
+        }
+        console.log(plano);
+        var map = L.map('map').setView([-25.3058, -57.82082], 8);
+        mapLink =
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; ' + mapLink + ' Contributors',
+                maxZoom: 18,
+            }).addTo(map);
+ 
+        for (var i = 0; i < plano.length; i++) {
+            marker = new L.marker([plano[i][1], plano[i][2]])
+                .bindPopup(plano[i][0])
+                .addTo(map);
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+</body>
+ 
+</html>
+
+<!-- https://pastebin.com/ehtcg1EE   -->
