@@ -5,9 +5,25 @@
     <title>Mapa casas</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.css" />
+    <style>
+        .titulo {
+            font-size:20px;
+            font-family:verdana;
+            text-align:center;
+        }
+        .descripcion{
+            font-size:20px;
+            color:blue;
+        }
+        .precio{
+            font-size:16px;
+            color:red;
+        }
+    </style>
 </head>
  
 <body id="cuerpo">
+    <div class="titulo">Mapas de ventas de casas Paraguay</div>
     <div id="map" style="width: 1000px; height: 800px" ></div>
     <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.js">
     </script>
@@ -21,7 +37,7 @@
         for (index = 0; index < datos.length; index++) {
             //console.log(index);  
            // console.log(lista_aux);
-            lista_aux = [ "<h1> "+ datos[index].descripcion+ "</h1>" + "Precio:" + datos[index].precio, datos[index].ubicacion.latitud, datos[index].ubicacion.longitud];                   
+            lista_aux = [ '<p class="descripcion">'+ datos[index].descripcion + "</p>" + 'Precio: <span class="precio">' + datos[index].precio + "</span>", datos[index].ubicacion.latitud, datos[index].ubicacion.longitud];                   
             plano.push(lista_aux);// agregamos al array
         }
         console.log(plano);
@@ -45,4 +61,3 @@
  
 </html>
 
-<!-- https://pastebin.com/ehtcg1EE   -->

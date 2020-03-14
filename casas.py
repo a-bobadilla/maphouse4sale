@@ -10,8 +10,8 @@ def separador(latitud_longitud):
             break   
     latitud= latitud_longitud[0:index_coma]
     longitud= latitud_longitud[index_coma: ]
-    # ver para que la funcion saque directo de la url 
-    print("lat:",latitud,"long:", longitud)
+    #para ver en consola los datos formateados descomentar la siguiente línea 
+    #print("lat:",latitud,"long:", longitud)
     return latitud, longitud
 def casas():
     """
@@ -20,22 +20,19 @@ def casas():
     """
     page=requests.get("https://casas.hendyla.com/")   
     soup= BeautifulSoup(page.content,'html.parser')
-    casas= soup.find_all('article',class_ ='product-item clasificado')
-    lista_datos=[] # vamos a cargar el diccionario con todos los datos 
-    for indice in range(len(casas)):  # recorremos 
+    datos = soup.find_all('article',class_ ='product-item clasificado')
+    lista_datos=[] # diccionario donde se cargan todos los datos
+    for indice in range(len(datos)):  
         try:
-            primera_casa= casas[indice]
+            dcasas = datos[indice]
             print("-----------------------")
-            # vamos a buscar el precio 
-            precio= primera_casa.find_all('div',class_='precio left')\
-                [0].p.get_text()[10:].replace(" ",'')
-            # se puede hacer de otra forma lo anterior, googlear
+            # buscamos el precio y formateamos los datos
+            precio= dcasas.find_all('div',class_='precio left')[0].p.get_text()[10:].replace(" ",'')
             print(precio)
-            descripcion= primera_casa.select('div.desc a')[0].get_text()
+            descripcion= dcasas.select('div.desc a')[0].get_text()
             print(descripcion)
-            #print(len(descripcion) )
-            url_publicacion= primera_casa.select('div.desc a')[0].get('href')
-            print(url_publicacion)# esta es la url de la pagin
+            url_publicacion= dcasas.select('div.desc a')[0].get('href')
+            print(url_publicacion)
             # sacar la latitud y longitud
             pagina2= requests.get(url_publicacion)
             soup2=BeautifulSoup(pagina2.content,'html.parser')
@@ -46,7 +43,7 @@ def casas():
             index_final= latitud_longitud.find('&')
             latitud_longitud= latitud_longitud[index_primero+1:index_final]
             latitud,longitud= separador(latitud_longitud)
-            datos={
+            resultado={
                 "precio": precio,
                 "descripcion":descripcion,
                 "ubicacion": {
@@ -54,7 +51,7 @@ def casas():
                     "longitud": longitud
                 }
             }
-            lista_datos.append(datos)
+            lista_datos.append(resultado)
             print("--------------------------------------")
         except:
             
@@ -65,7 +62,7 @@ def casas():
             latitud_longitud= latitud_long[index_primero+1:index_final]
             print("excepcion")
             latitud,longitud= separador(latitud_longitud)
-            datos={
+            resultado={
                 "precio": precio,
                 "descripcion":descripcion,
                 "ubicacion": {
@@ -73,17 +70,11 @@ def casas():
                     "longitud": longitud
                 }
             }
-            lista_datos.append(datos)
+            lista_datos.append(resultado)
 
-            #continue
     print("cantidad colectada:", len(lista_datos))
     return lista_datos
 
 #casas()
-#   https://pastebin.com/s4UaXN3Y
-
-
-
-# https://pastebin.com/bUEvbx13
 
 
